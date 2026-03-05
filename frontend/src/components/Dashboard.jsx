@@ -105,8 +105,8 @@ const Dashboard = () => {
                                     dataKey="value"
                                 >
                                     {verificationData.map((entry, index) => (
-                                        <Cell key={\`cell-\${index}\`} fill={entry.color} />
-                  ))}
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
                                 </Pie>
                                 <Tooltip
                                     contentStyle={{ backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px' }}
