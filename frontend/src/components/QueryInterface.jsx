@@ -167,7 +167,7 @@ const QueryInterface = () => {
                         <div className="glass-card fade-in" style={{ marginTop: '2rem', borderTop: '4px solid var(--accent-blue)' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>Evaluation Details: {selectedResponse.model_name}</h3>
+                                    <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>Deep Analysis: {selectedResponse.model_name}</h3>
                                     <div style={{ display: 'flex', gap: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                                         <span>Accuracy Score: {selectedResponse.verificationScore}%</span>
                                         <span>Hallucination Probability: {100 - selectedResponse.verificationScore}%</span>
@@ -179,11 +179,26 @@ const QueryInterface = () => {
                             </div>
 
                             <div className="grid-2">
-                                <div>
-                                    <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Extracted Evidence</h4>
-                                    <div style={{ background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-green)', fontSize: '0.95rem' }}>
-                                        "The factual information retrieved from trusted sources highly correlates with this response structure."
-                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Sentence-by-Sentence Breakdown</h4>
+
+                                    {selectedResponse.deep_analysis && selectedResponse.deep_analysis.map((item, idx) => (
+                                        <div key={idx} style={{
+                                            background: 'var(--bg-tertiary)',
+                                            padding: '1rem',
+                                            borderRadius: '8px',
+                                            borderLeft: `3px solid ${item.status === 'Verified' ? 'var(--accent-green)' : item.status === 'Warning' ? 'var(--accent-yellow)' : 'var(--accent-red)'}`,
+                                            fontSize: '0.95rem'
+                                        }}>
+                                            <div style={{ marginBottom: '0.5rem', fontWeight: 500 }}>"{item.sentence}"</div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <span className={`badge ${item.status === 'Verified' ? 'badge-green' : item.status === 'Warning' ? 'badge-yellow' : 'badge-red'}`} style={{ padding: '2px 8px', fontSize: '0.75rem' }}>
+                                                    {item.status}
+                                                </span>
+                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{item.reason}</span>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
 
                                 <div>

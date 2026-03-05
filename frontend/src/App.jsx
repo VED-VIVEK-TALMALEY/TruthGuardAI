@@ -1,12 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Activity, LayoutDashboard, MessageSquare, Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { Activity, LayoutDashboard, MessageSquare, History, LogOut } from 'lucide-react';
 
 import Dashboard from './components/Dashboard';
 import QueryInterface from './components/QueryInterface';
+import Login from './components/Login';
+import QueryHistory from './components/QueryHistory';
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const location = useLocation();
+
+  if (location.pathname === '/login') return null;
 
   return (
     <nav className="navbar">
@@ -31,29 +35,75 @@ const Navbar = () => {
             <MessageSquare size={18} /> Evaluate LLMs
           </div>
         </Link>
-      </div >
+        <Link
+          to="/history"
+          className={`nav-link ${location.pathname === '/history' ? 'active' : ''}`}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <History size={18} /> Prompt Storage
+          </div>
+        </Link>
+      </div>
       <div>
         <button
           className="btn btn-secondary"
           style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-          onClick={() => alert("Profile functionality coming soon!")}
+          onClick={onLogout}
         >
-          <Settings size={16} /> Profile
+          <LogOut size={16} /> Logout
         </button>
       </div>
-    </nav >
+    </nav>
   );
 };
 
+const ProtectedRoute = ({ children, isAuthenticated }) => {
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  return children;
+};
+
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const auth = localStorage.getItem('isAuthenticated');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = () => setIsAuthenticated(true);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    setIsAuthenticated(false);
+  };
+
   return (
     <Router>
       <div className="app-container">
-        <Navbar />
+        <Navbar onLogout={handleLogout} />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/query" element={<QueryInterface />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+
+            <Route path="/" element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/query" element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <QueryInterface />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/history" element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <QueryHistory />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
       </div>

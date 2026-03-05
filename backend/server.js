@@ -80,10 +80,41 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 function generateMockLLMResponses(question) {
     return [
-        { model_name: 'GPT', response_text: `GPT says: ${question} is mostly true.`, confidence_score: 0.95 },
-        { model_name: 'Claude', response_text: `Claude says: Here is a detailed answer to ${question}.`, confidence_score: 0.96 },
-        { model_name: 'Gemini', response_text: `Gemini says: I am not sure about ${question}.`, confidence_score: 0.50 },
-        { model_name: 'LLaMA', response_text: `LLaMA says: The concept of ${question} is interesting.`, confidence_score: 0.85 }
+        {
+            model_name: 'GPT',
+            response_text: `GPT says: ${question} is mostly true. It is a verifiable fact according to historical records.`,
+            confidence_score: 0.95,
+            deep_analysis: [
+                { sentence: `GPT says: ${question} is mostly true.`, status: 'Verified', reason: 'Matches verified claims in Britannica.' },
+                { sentence: `It is a verifiable fact according to historical records.`, status: 'Verified', reason: 'General statement aligned with evidence.' }
+            ]
+        },
+        {
+            model_name: 'Claude',
+            response_text: `Claude says: Here is a detailed answer to ${question}. The core premise is historically accurate.`,
+            confidence_score: 0.96,
+            deep_analysis: [
+                { sentence: `Claude says: Here is a detailed answer to ${question}.`, status: 'Verified', reason: 'Introduction.' },
+                { sentence: `The core premise is historically accurate.`, status: 'Verified', reason: 'Corroborated by Wikipedia.' }
+            ]
+        },
+        {
+            model_name: 'Gemini',
+            response_text: `Gemini says: I am not sure about ${question}. Some sources claim it happens on Mars.`,
+            confidence_score: 0.50,
+            deep_analysis: [
+                { sentence: `Gemini says: I am not sure about ${question}.`, status: 'Warning', reason: 'Low confidence statement.' },
+                { sentence: `Some sources claim it happens on Mars.`, status: 'Hallucination', reason: 'Direct contradiction with scientific consensus.' }
+            ]
+        },
+        {
+            model_name: 'LLaMA',
+            response_text: `LLaMA says: The concept of ${question} is interesting, but technically flawed.`,
+            confidence_score: 0.85,
+            deep_analysis: [
+                { sentence: `LLaMA says: The concept of ${question} is interesting, but technically flawed.`, status: 'Warning', reason: 'Partially verified, semantic ambiguity.' }
+            ]
+        }
     ];
 }
 
@@ -98,6 +129,21 @@ function generateMockVerification(responses) {
 
 
 // Routes
+
+app.get('/api/history', (req, res) => {
+    // Get all queries with their verification status
+    const query = `
+        SELECT q.query_id, q.question, q.timestamp, 
+               v.similarity_score, v.status 
+        FROM Queries q
+        LEFT JOIN Verification v ON q.query_id = v.query_id
+        ORDER BY q.timestamp DESC
+    `;
+    db.all(query, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
 
 app.get('/api/stats', (req, res) => {
     // Return dynamic stats from db
