@@ -112,33 +112,33 @@ app.get('/api/stats', (req, res) => {
 
 app.post('/api/query', (req, res) => {
     const { question, userId = 1 } = req.body;
-    
+
     if (!question) {
         return res.status(400).json({ error: 'Question is required' });
     }
 
-    db.run(`INSERT INTO Queries (user_id, question) VALUES (?, ?)`, [userId, question], function(err) {
+    db.run(`INSERT INTO Queries (user_id, question) VALUES (?, ?)`, [userId, question], function (err) {
         if (err) return res.status(500).json({ error: err.message });
-        
+
         const queryId = this.lastID;
         const llmResponses = generateMockLLMResponses(question);
-        
+
         let insertedResponsesCount = 0;
         llmResponses.forEach(r => {
             db.run(`INSERT INTO LLM_Responses (query_id, model_name, response_text, confidence_score) VALUES (?, ?, ?, ?)`,
-                [queryId, r.model_name, r.response_text, r.confidence_score], 
-                function(err) {
+                [queryId, r.model_name, r.response_text, r.confidence_score],
+                function (err) {
                     if (err) console.error(err);
                     insertedResponsesCount++;
-                    if(insertedResponsesCount === llmResponses.length) {
+                    if (insertedResponsesCount === llmResponses.length) {
                         // After all LLM responses are inserted, generate verification
                         const verification = generateMockVerification(llmResponses);
-                        
+
                         db.run(`INSERT INTO Verification (query_id, similarity_score, hallucination_prob, status) VALUES (?, ?, ?, ?)`,
                             [queryId, verification.similarity_score, verification.hallucination_prob, verification.status],
-                            function(err) {
+                            function (err) {
                                 if (err) return res.status(500).json({ error: err.message });
-                                
+
                                 res.json({
                                     queryId,
                                     question,
@@ -148,12 +148,12 @@ app.post('/api/query', (req, res) => {
                             }
                         );
                     }
-            });
+                });
         });
     });
 });
 
 
 app.listen(PORT, () => {
-    console.log(\`Server is running on http://localhost:\${PORT}\`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

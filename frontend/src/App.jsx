@@ -17,26 +17,26 @@ const Navbar = () => {
       <div className="nav-links">
         <Link
           to="/"
-          className={\`nav-link \${location.pathname === '/' ? 'active' : ''}\`}
+          className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
         >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <LayoutDashboard size={18} /> Dashboard
-        </div>
-      </Link>
-      <Link
-        to="/query"
-        className={\`nav-link \${location.pathname === '/query' ? 'active' : ''}\`}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <LayoutDashboard size={18} /> Dashboard
+          </div>
+        </Link>
+        <Link
+          to="/query"
+          className={`nav-link ${location.pathname === '/query' ? 'active' : ''}`}
         >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <MessageSquare size={18} /> Evaluate LLMs
-      </div>
-    </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MessageSquare size={18} /> Evaluate LLMs
+          </div>
+        </Link>
       </div >
-  <div>
-    <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-      <Settings size={16} /> Profile
-    </button>
-  </div>
+      <div>
+        <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Settings size={16} /> Profile
+        </button>
+      </div>
     </nav >
   );
 };
