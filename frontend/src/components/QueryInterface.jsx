@@ -126,87 +126,87 @@ const QueryInterface = () => {
                             else if (r.confidence_score < 0.9) { rowStatus = 'Warning'; badgeCls = 'badge-yellow'; }
 
                             return (
-                <div 
-                  key={idx} 
-                  className="glass-card" 
-                  style={{ 
-                    cursor: 'pointer',
-                    border: selectedResponse === r ? '2px solid var(--accent-blue)' : '1px solid var(--border-color)'
-                  }}
-                  onClick={() => setSelectedResponse({...r, status: rowStatus, verificationScore: Math.round(r.confidence_score * 100) })}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 700 }}>{r.model_name}</div>
-                    <div className={\`badge \${badgeCls}\`} style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-                      {getStatusIcon(rowStatus)}
-                      {rowStatus}
+                                <div
+                                    key={idx}
+                                    className="glass-card"
+                                    style={{
+                                        cursor: 'pointer',
+                                        border: selectedResponse === r ? '2px solid var(--accent-blue)' : '1px solid var(--border-color)'
+                                    }}
+                                    onClick={() => setSelectedResponse({ ...r, status: rowStatus, verificationScore: Math.round(r.confidence_score * 100) })}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <div style={{ fontSize: '1.2rem', fontWeight: 700 }}>{r.model_name}</div>
+                                        <div className={`badge ${badgeCls}`} style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                                            {getStatusIcon(rowStatus)}
+                                            {rowStatus}
+                                        </div>
+                                    </div>
+
+                                    <div style={{
+                                        background: 'rgba(0,0,0,0.2)',
+                                        padding: '1rem',
+                                        borderRadius: '8px',
+                                        marginBottom: '1rem',
+                                        minHeight: '80px',
+                                        color: 'var(--text-primary)'
+                                    }}>
+                                        {r.response_text}
+                                    </div>
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                        <span>Model Confidence: {Math.round(r.confidence_score * 100)}%</span>
+                                        <span>Verification Score: {Math.round(r.confidence_score * 100) - Math.floor(Math.random() * 5)}%</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
-                  </div>
-                  
-                  <div style={{ 
-                    background: 'rgba(0,0,0,0.2)', 
-                    padding: '1rem', 
-                    borderRadius: '8px',
-                    marginBottom: '1rem',
-                    minHeight: '80px',
-                    color: 'var(--text-primary)'
-                  }}>
-                    {r.response_text}
-                  </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                    <span>Model Confidence: {Math.round(r.confidence_score * 100)}%</span>
-                    <span>Verification Score: {Math.round(r.confidence_score * 100) - Math.floor(Math.random() * 5)}%</span>
-                  </div>
-                </div>
-                    );
-            })}
-                </div>
+                    {selectedResponse && (
+                        <div className="glass-card fade-in" style={{ marginTop: '2rem', borderTop: '4px solid var(--accent-blue)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                                <div>
+                                    <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>Evaluation Details: {selectedResponse.model_name}</h3>
+                                    <div style={{ display: 'flex', gap: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                        <span>Accuracy Score: {selectedResponse.verificationScore}%</span>
+                                        <span>Hallucination Probability: {100 - selectedResponse.verificationScore}%</span>
+                                    </div>
+                                </div>
+                                <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    Manual Review <ChevronRight size={16} />
+                                </button>
+                            </div>
 
-          {selectedResponse && (
-                <div className="glass-card fade-in" style={{ marginTop: '2rem', borderTop: '4px solid var(--accent-blue)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                        <div>
-                            <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>Evaluation Details: {selectedResponse.model_name}</h3>
-                            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                                <span>Accuracy Score: {selectedResponse.verificationScore}%</span>
-                                <span>Hallucination Probability: {100 - selectedResponse.verificationScore}%</span>
+                            <div className="grid-2">
+                                <div>
+                                    <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Extracted Evidence</h4>
+                                    <div style={{ background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-green)', fontSize: '0.95rem' }}>
+                                        "The factual information retrieved from trusted sources highly correlates with this response structure."
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Source Trust</h4>
+                                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px' }}>
+                                        <li style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                            <span>Wikipedia</span> <span style={{ color: 'var(--accent-green)' }}>High (98%)</span>
+                                        </li>
+                                        <li style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <span>Britannica</span> <span style={{ color: 'var(--accent-green)' }}>High (99%)</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            Manual Review <ChevronRight size={16} />
-                        </button>
-                    </div>
+                    )}
 
-                    <div className="grid-2">
-                        <div>
-                            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Extracted Evidence</h4>
-                            <div style={{ background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-green)', fontSize: '0.95rem' }}>
-                                "The factual information retrieved from trusted sources highly correlates with this response structure."
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase' }}>Source Trust</h4>
-                            <ul style={{ listStyle: 'none', padding: 0, margin: 0, background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px' }}>
-                                <li style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                    <span>Wikipedia</span> <span style={{ color: 'var(--accent-green)' }}>High (98%)</span>
-                                </li>
-                                <li style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <span>Britannica</span> <span style={{ color: 'var(--accent-green)' }}>High (99%)</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
-            )}
+            )
+            }
 
-        </div>
-    )
-}
-
-    </div >
-  );
+        </div >
+    );
 };
 
 export default QueryInterface;
