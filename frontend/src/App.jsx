@@ -33,7 +33,11 @@ const Navbar = () => {
         </Link>
       </div >
       <div>
-        <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <button
+          className="btn btn-secondary"
+          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          onClick={() => alert("Profile functionality coming soon!")}
+        >
           <Settings size={16} /> Profile
         </button>
       </div>

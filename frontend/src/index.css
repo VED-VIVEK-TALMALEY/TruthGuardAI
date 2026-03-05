@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --bg-primary: #0a0a0c;
   --bg-secondary: #13141a;
@@ -15,7 +17,7 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -53,7 +55,7 @@ a {
   border-bottom: 1px solid var(--glass-border);
   position: sticky;
   top: 0;
-  z-层: 100;
+  z-index: 100;
 }
 
 .navbar-brand {
@@ -63,6 +65,7 @@ a {
   align-items: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #fff, #9aa0a6);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -78,7 +81,8 @@ a {
   transition: color 0.2s ease;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover,
+.nav-link.active {
   color: var(--text-primary);
 }
 
@@ -166,10 +170,21 @@ a {
   height: 4px;
 }
 
-.stat-card.blue::before { background: var(--accent-blue); }
-.stat-card.green::before { background: var(--accent-green); }
-.stat-card.red::before { background: var(--accent-red); }
-.stat-card.yellow::before { background: var(--accent-yellow); }
+.stat-card.blue::before {
+  background: var(--accent-blue);
+}
+
+.stat-card.green::before {
+  background: var(--accent-green);
+}
+
+.stat-card.red::before {
+  background: var(--accent-red);
+}
+
+.stat-card.yellow::before {
+  background: var(--accent-yellow);
+}
 
 .stat-value {
   font-size: 3.5rem;
@@ -187,10 +202,21 @@ a {
   font-weight: 600;
 }
 
-.stat-card.blue .stat-value { color: var(--accent-blue); }
-.stat-card.green .stat-value { color: var(--accent-green); }
-.stat-card.red .stat-value { color: var(--accent-red); }
-.stat-card.yellow .stat-value { color: var(--accent-yellow); }
+.stat-card.blue .stat-value {
+  color: var(--accent-blue);
+}
+
+.stat-card.green .stat-value {
+  color: var(--accent-green);
+}
+
+.stat-card.red .stat-value {
+  color: var(--accent-red);
+}
+
+.stat-card.yellow .stat-value {
+  color: var(--accent-yellow);
+}
 
 /* Animated Counter */
 @keyframes countUp {
@@ -198,6 +224,7 @@ a {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -261,9 +288,23 @@ a {
   text-transform: uppercase;
 }
 
-.badge-green { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.2); }
-.badge-red { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.2); }
-.badge-yellow { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); border: 1px solid rgba(245, 158, 11, 0.2); }
+.badge-green {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-green);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-red {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--accent-red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge-yellow {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--accent-yellow);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
 
 /* Charts Area Placeholder */
 .chart-container {
@@ -279,8 +320,13 @@ a {
 
 /* Animation Utilities */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
